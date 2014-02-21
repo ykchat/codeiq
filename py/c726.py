@@ -1,4 +1,5 @@
 # coding: UTF-8
+# Note: 0を必ず含む場合に変更
 
 def search(num):
 
@@ -8,6 +9,8 @@ def search(num):
     while 0 in terms:
         i += 1
         digits = format(i, 'b')
+        if not '0' in digits:
+            continue
         value = 0
         for digit in digits:
             value *= 10
