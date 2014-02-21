@@ -4,12 +4,12 @@ def main(roman):
 
     arabic = 0
 
-    prev = 5000
+    prev = 0
 
-    for symbol in roman:
+    for symbol in roman[::-1]:
         value = symbols[symbol]
-        if value > prev:
-            arabic += value - prev * 2
+        if value < prev:
+            arabic -= value
         else:
             arabic += value
         prev = value
