@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <title>CodeIQ解答用</title>
+</head>
+<body>
+
+<p id='output'></p>
+
+<script>
+$(function() {
+
+    String.prototype.repeat = function(n) {
+        return (new Array(n+1)).join(this)
+    };
+
+    var answer= 'w'.repeat(10) + 'v' + 'w'.repeat(20);
+    $('#output').text(answer);
+
+});
+</script>
+
+</body>
+</html>
