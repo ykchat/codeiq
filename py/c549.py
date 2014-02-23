@@ -8,7 +8,7 @@ def generate_array_2d(modified, n, m):
             for j in range(m):
                 result[i].append(0)
     else:
-        result = [[0] * m] * n
+        result =  [[0] * m for i in range(n)]
 
     return result
 
@@ -20,7 +20,7 @@ def flip_dict_items(modified, src):
         for key in src:
             dst[src[key]] = key
     else:
-        dst = {src[key]:key for key in src}
+        dst = {value:key for key, value in src.items()}
 
     return dst
 
