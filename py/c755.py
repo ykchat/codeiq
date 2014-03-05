@@ -32,14 +32,18 @@ def search(nums):
     mincomb10 = None
     minnsw10 = max(combs5.values())*2 + max(combs2.values())
     minnsw5 = min(combs5.values())
-    minnsw2 = min(combs5.values())
+    minnsw2 = min(combs2.values())
+
+    combs51 = combs5
+    combs52 = combs5.copy()
 
     # 10個表示の組合せ
-    for comb1, nsw1 in sorted(combs5.items(), key=lambda x:x[1]):
+    for comb1, nsw1 in sorted(combs51.items(), key=lambda x:x[1]):
+        combs51.pop(comb1[::-1])
         # 最小切替回数が現れる可能性がなくなったらループ終了
-        if minnsw10 <= (nsw1 + minnsw2 + minnsw5):
+        if minnsw10 <= (nsw1 + minnsw2 + nsw1):
             break
-        for comb2, nsw2 in sorted(combs5.items(), key=lambda x:x[1]):
+        for comb2, nsw2 in sorted(combs51.items(), key=lambda x:x[1]):
             if re.search('['+comb2+']', comb1) is not None:
                 continue
             nsw = nsw1 + format(nums[int(comb1[4])]^nums[int(comb2[0])], 'b').count('1') + nsw2
@@ -47,7 +51,7 @@ def search(nums):
                 mincomb10 = comb1+comb2
                 minnsw10 = nsw
             # 最小切替回数が現れる可能性がなくなったらループ終了
-            else:
+            elif minnsw10 <= (nsw1+ minnsw2 + nsw2):
                 break
 
     print "最小切替回数:%d, 表示順:%s" % (minnsw10, mincomb10)
@@ -67,3 +71,4 @@ if __name__ == '__main__':
     nums.append(int('1111011', 2))
 
     search(nums)
+
