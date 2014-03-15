@@ -4,57 +4,32 @@ import re
 
 def search(nums):
 
-    # 2個表示の組合せ
-    combs2 = {}
-    for i in range(10):
-        for j in range(10):
-            if i == j:
-                continue
-            combs2[str(i)+str(j)] = format(nums[i]^nums[j], 'b').count('1')
+    size = len(nums)
 
-    # 3個表示の組合せ
-    combs3 = {}
-    for comb, nsw in combs2.items():
-        for i in range(10):
-            if str(i) in comb:
-                continue
-            combs3[comb+str(i)] = nsw + format(nums[int(comb[1])]^nums[i], 'b').count('1')
+    # 切替回数
+    sw = [[format(nums[i]^nums[j], 'b').count('1') for i in range(size)] for j in range(size)]
 
-    # 5個表示の組合せ
-    combs5 = {}
-    minnsw5 = None
-    for comb1, nsw1 in combs3.items():
-        for comb2, nsw2 in combs2.items():
-            if re.search('['+comb2+']', comb1) is not None:
-                continue
-            combs5[comb1+comb2] = nsw1 + format(nums[int(comb1[2])]^nums[int(comb2[0])], 'b').count('1') + nsw2
+    min = [7*(size-1), '']
 
-    mincomb10 = None
-    minnsw10 = max(combs5.values())*2 + max(combs2.values())
-    minnsw5 = min(combs5.values())
-    minnsw2 = min(combs2.values())
+    for i in range(size):
+        trace(min, 0, str(i), size, sw)
 
-    combs51 = combs5
-    combs52 = combs5.copy()
+    print "最小切替回数:%d, 表示順:%s" % tuple(min)
 
-    # 10個表示の組合せ
-    for comb1, nsw1 in sorted(combs51.items(), key=lambda x:x[1]):
-        combs51.pop(comb1[::-1])
-        # 最小切替回数が現れる可能性がなくなったらループ終了
-        if minnsw10 <= (nsw1 + minnsw2 + nsw1):
-            break
-        for comb2, nsw2 in sorted(combs51.items(), key=lambda x:x[1]):
-            if re.search('['+comb2+']', comb1) is not None:
-                continue
-            nsw = nsw1 + format(nums[int(comb1[4])]^nums[int(comb2[0])], 'b').count('1') + nsw2
-            if minnsw10 > nsw:
-                mincomb10 = comb1+comb2
-                minnsw10 = nsw
-            # 最小切替回数が現れる可能性がなくなったらループ終了
-            elif minnsw10 <= (nsw1+ minnsw2 + nsw2):
-                break
+def trace(min, sum, seq, size, sw):
 
-    print "最小切替回数:%d, 表示順:%s" % (minnsw10, mincomb10)
+    if len(seq) == size:
+        min[0] = sum
+        min[1] = seq
+        return
+
+    for i in range(size):
+        if seq.count(str(i)) == 1:
+            continue
+        nsum = sum + sw[int(seq[-1])][i]
+        nseq = seq + str(i)
+        if nsum < min[0]:
+            trace(min, nsum, nseq, size, sw)
 
 if __name__ == '__main__':
 
